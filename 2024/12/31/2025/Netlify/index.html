@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="kenhinschan&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      使用Netlify和GitHub Pages部署项目的比较与实践 | 个人笔记
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>个人笔记</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/categories" class="item-link">分类</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about" class="item-link">关于</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/categories" class="menu-link">分类</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about" class="menu-link">关于</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>使用Netlify和GitHub Pages部署项目的比较与实践</h2>
+  <p class="post-date">2024-12-31</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><p>在软件开发中，部署是将软件应用程序或网站发布到生产环境的过程。对于前端<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/xly.html">开发者</a>来说，常见的部署工具包括 Netlify 和 GitHub Pages。本文将介绍这两种工具的特点和使用方法，并比较它们的优劣，帮助读者选择最适合自己的部署方案。</p>
+<p><strong>一、Netlify 部署项目</strong></p>
+<p>Netlify 是一个强大的部署和托管平台，它支持多种前端框架和静态网站生成器。使用 Netlify 部署项目，可以享受到以下优势：</p>
+<ol>
+<li><strong>自动化构建和部署</strong>：Netlify 可以自动检测代码仓库中的变化，并触发构建和部署流程。这意味着每次提交代码后，无需手动操作，项目就能自动更新到线上环境。</li>
+<li><strong>强大的集成能力</strong>：Netlify 支持与多种工具和服务的集成，如 CMS（内容管理系统）、表单处理等。这使得开发者能够更轻松地构建功能丰富的网站。</li>
+<li><strong>高效的性能优化</strong>：Netlify 会自动对部署的项目进行性能优化，如缓存静态资源、启用<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/cdn.html">CDN</a>等。这有助于提高网站的加载速度和用户体验。</li>
+</ol>
+<p><strong>使用步骤</strong>：</p>
+<ol>
+<li>在 Netlify 官网上注册账号并创建一个新站点。</li>
+<li>将项目的代码仓库与 Netlify 关联起来。</li>
+<li>配置构建设置，指定构建命令和输出目录。</li>
+<li>自定义<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/bcd.html">域名</a>和其他设置（可选）。</li>
+<li>点击“Deploy site”按钮，等待部署完成。</li>
+</ol>
+<p><strong>二、GitHub Pages 部署项目</strong></p>
+<p>GitHub Pages 是 GitHub 提供的一项免费托管服务，允许用户将项目部署为静态网站。使用 GitHub Pages 部署项目具有以下特点：</p>
+<ol>
+<li><strong>免费且易于设置</strong>：GitHub Pages 是免费的，并且与 GitHub 仓库紧密集成。只需简单配置，即可将项目发布到线上。</li>
+<li><strong>自定义域名支持</strong>：虽然默认使用<code>[用户名].github.io</code>或<code>[仓库名].github.io</code>作为域名，但 GitHub Pages 也支持自定义域名。</li>
+<li>**适合小型项目和<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/doc.html">文档</a>**：GitHub Pages 更适合托管小型静态网站、博客或个人文档等。</li>
+</ol>
+<p><strong>使用步骤</strong>：</p>
+<ol>
+<li>在 GitHub 上创建一个新的仓库，或者使用已有的仓库。</li>
+<li>在仓库根目录下创建一个名为<code>index.html</code>的文件，作为网站的首页。</li>
+<li>（可选）配置其他静态文件，如 CSS、JavaScript、图片等。</li>
+<li>在仓库设置中启用 GitHub Pages，并选择要发布的分支。</li>
+<li>等待几分钟，GitHub Pages 会自动生成一个 URL，可以通过该 URL 访问部署的网站。</li>
+</ol>
+<p><strong>三、比较与选择</strong></p>
+<p>Netlify 和 GitHub Pages 各有优劣，适合不同的场景和需求。总体来说，Netlify 功能更强大、适合大型项目和复杂场景，而 GitHub Pages 则更适合小型项目、文档和快速部署。在选择部署工具时，可以考虑以下几点：</p>
+<ul>
+<li>项目规模和复杂度：大型项目或需要高级功能的场景更适合选择 Netlify。</li>
+<li>集成需求：如果需要与其他工具和服务集成，Netlify 更具优势。</li>
+<li>预算：虽然 GitHub Pages 免费，但 Netlify 也提供免费试用和付费计划，可根据预算进行选择。</li>
+</ul>
+<p><strong>四、总结</strong></p>
+<p>通过本文的介绍和比较，相信读者对 Netlify 和 GitHub Pages 有了更深入的了解。在实际开发中，可以根据项目需求和个人喜好选择合适的部署工具。无论是使用 Netlify 还是 GitHub Pages，都能够轻松地将项目部署到线上，让更多人访问和使用。</p>
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Netlify" >
+    <span class="tag-code">Netlify</span>
+  </a>
+
+  <a href="/tags#GithubPage" >
+    <span class="tag-code">GithubPage</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2024/12/24/hello-world/">
+        <span class="nav-arrow">← </span>
+        
+          Hello World
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="nav">none</ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://example.com/2024/12/31/2025/Netlify/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2024 | Proudly powered by <a href="#" target="_blank">GPT</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/kenhinschan">kenhinschan</a>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
