@@ -10,7 +10,7 @@
   
   <title>
     
-      Hello World | 个人笔记
+      使用Netlify和GitHub Pages部署项目的比较与实践 | 个人笔记
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -180,8 +180,8 @@
 </header>
 
     <div id="article-banner">
-  <h2>Hello World</h2>
-  <p class="post-date">2024-12-24</p>
+  <h2>使用Netlify和GitHub Pages部署项目的比较与实践</h2>
+  <p class="post-date">2024-12-31</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
   </div>
@@ -189,21 +189,57 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <section class="markdown-content"><p>在软件开发中，部署是将软件应用程序或网站发布到生产环境的过程。对于前端<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/xly.html">开发者</a>来说，常见的部署工具包括 Netlify 和 GitHub Pages。本文将介绍这两种工具的特点和使用方法，并比较它们的优劣，帮助读者选择最适合自己的部署方案。</p>
+<p><strong>一、Netlify 部署项目</strong></p>
+<p>Netlify 是一个强大的部署和托管平台，它支持多种前端框架和静态网站生成器。使用 Netlify 部署项目，可以享受到以下优势：</p>
+<ol>
+<li><strong>自动化构建和部署</strong>：Netlify 可以自动检测代码仓库中的变化，并触发构建和部署流程。这意味着每次提交代码后，无需手动操作，项目就能自动更新到线上环境。</li>
+<li><strong>强大的集成能力</strong>：Netlify 支持与多种工具和服务的集成，如 CMS（内容管理系统）、表单处理等。这使得开发者能够更轻松地构建功能丰富的网站。</li>
+<li><strong>高效的性能优化</strong>：Netlify 会自动对部署的项目进行性能优化，如缓存静态资源、启用<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/cdn.html">CDN</a>等。这有助于提高网站的加载速度和用户体验。</li>
+</ol>
+<p><strong>使用步骤</strong>：</p>
+<ol>
+<li>在 Netlify 官网上注册账号并创建一个新站点。</li>
+<li>将项目的代码仓库与 Netlify 关联起来。</li>
+<li>配置构建设置，指定构建命令和输出目录。</li>
+<li>自定义<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/bcd.html">域名</a>和其他设置（可选）。</li>
+<li>点击“Deploy site”按钮，等待部署完成。</li>
+</ol>
+<p><strong>二、GitHub Pages 部署项目</strong></p>
+<p>GitHub Pages 是 GitHub 提供的一项免费托管服务，允许用户将项目部署为静态网站。使用 GitHub Pages 部署项目具有以下特点：</p>
+<ol>
+<li><strong>免费且易于设置</strong>：GitHub Pages 是免费的，并且与 GitHub 仓库紧密集成。只需简单配置，即可将项目发布到线上。</li>
+<li><strong>自定义域名支持</strong>：虽然默认使用<code>[用户名].github.io</code>或<code>[仓库名].github.io</code>作为域名，但 GitHub Pages 也支持自定义域名。</li>
+<li>**适合小型项目和<a target="_blank" rel="noopener" href="https://cloud.baidu.com/product/doc.html">文档</a>**：GitHub Pages 更适合托管小型静态网站、博客或个人文档等。</li>
+</ol>
+<p><strong>使用步骤</strong>：</p>
+<ol>
+<li>在 GitHub 上创建一个新的仓库，或者使用已有的仓库。</li>
+<li>在仓库根目录下创建一个名为<code>index.html</code>的文件，作为网站的首页。</li>
+<li>（可选）配置其他静态文件，如 CSS、JavaScript、图片等。</li>
+<li>在仓库设置中启用 GitHub Pages，并选择要发布的分支。</li>
+<li>等待几分钟，GitHub Pages 会自动生成一个 URL，可以通过该 URL 访问部署的网站。</li>
+</ol>
+<p><strong>三、比较与选择</strong></p>
+<p>Netlify 和 GitHub Pages 各有优劣，适合不同的场景和需求。总体来说，Netlify 功能更强大、适合大型项目和复杂场景，而 GitHub Pages 则更适合小型项目、文档和快速部署。在选择部署工具时，可以考虑以下几点：</p>
+<ul>
+<li>项目规模和复杂度：大型项目或需要高级功能的场景更适合选择 Netlify。</li>
+<li>集成需求：如果需要与其他工具和服务集成，Netlify 更具优势。</li>
+<li>预算：虽然 GitHub Pages 免费，但 Netlify 也提供免费试用和付费计划，可根据预算进行选择。</li>
+</ul>
+<p><strong>四、总结</strong></p>
+<p>通过本文的介绍和比较，相信读者对 Netlify 和 GitHub Pages 有了更深入的了解。在实际开发中，可以根据项目需求和个人喜好选择合适的部署工具。无论是使用 Netlify 还是 GitHub Pages，都能够轻松地将项目部署到线上，让更多人访问和使用。</p>
 </section>
     <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#Netlify" >
+    <span class="tag-code">Netlify</span>
+  </a>
+
+      </div>
     
     <!-- Tags END -->
     <!-- NAV START -->
@@ -211,13 +247,13 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-    
-      <a class="nav-right" href="/2024/12/31/2025/Netlify/">
+      <a class="nav-left" href="/2024/12/24/hello-world/">
+        <span class="nav-arrow">← </span>
         
-          使用Netlify和GitHub Pages部署项目的比较与实践
+          Hello World
         
-        <span class="nav-arrow"> →</span>
       </a>
+    
     
   </div>
 
@@ -269,7 +305,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Quick-Start"><span class="toc-nav-text">Quick Start</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Create-a-new-post"><span class="toc-nav-text">Create a new post</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Run-server"><span class="toc-nav-text">Run server</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Generate-static-files"><span class="toc-nav-text">Generate static files</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Deploy-to-remote-sites"><span class="toc-nav-text">Deploy to remote sites</span></a></li></ol></li></ol>
+      <ol class="nav">none</ol>
     
   </div>
 </aside>
@@ -279,7 +315,7 @@
 
 <script>
   (function () {
-    var url = 'http://example.com/2024/12/24/hello-world/';
+    var url = 'http://example.com/2024/12/31/2025/Netlify/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
