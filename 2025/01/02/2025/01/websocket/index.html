@@ -206,7 +206,7 @@
 <h2 id="websocket集群-分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）"><a href="#websocket集群-分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）" class="headerlink" title="websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)"></a>websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)</h2><blockquote>
 <p>本来想用websocket做一个消息推送 可是分布式环境下不支持session共享因为服务器不同<br>所以采用 rabbitMQ+webSocket实现分布式消息推送<br>1、生产者将消息 发送给 rabbitMQ 的 virtual-host:&#x2F;(顶极路由) 再由它路由到交换机 最终由交换机通过”路由键”–”指定具体的管道”<br>2、消费者监听–”指定的管道”–获取消息<br>3、最终将获取的消息 交给 webSocket 被@OnMessage注解标识的方法<br>4、每次消费一条消息交给　被@OnMessage注解标识的方法 返回给前台<br>最终实现分布式实时推送</p>
 </blockquote>
-<p><img src="/image/websocket.png" alt="websocket集群"></p>
+<p><img src="/doc/image/websocket.png" alt="websocket集群"></p>
 <h3 id="下面就说一下代码中会出现的问题"><a href="#下面就说一下代码中会出现的问题" class="headerlink" title="下面就说一下代码中会出现的问题"></a>下面就说一下代码中会出现的问题</h3><ul>
 <li>[TEXT_FULL_WRITING]</li>
 </ul>
