@@ -10,7 +10,7 @@
   
   <title>
     
-      websocket消息推送模块（分布式）（redis消息发布订阅） | 个人笔记
+      SpringCloud体系的微服务架构 | 个人笔记
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -192,8 +192,8 @@
 </header>
 
     <div id="article-banner">
-  <h2>websocket消息推送模块（分布式）（redis消息发布订阅）</h2>
-  <p class="post-date">2025-01-02</p>
+  <h2>SpringCloud体系的微服务架构</h2>
+  <p class="post-date">2025-01-03</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
   </div>
@@ -201,38 +201,40 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h2 id="项目中使用websocket消息推送模块（分布式）（websocket）"><a href="#项目中使用websocket消息推送模块（分布式）（websocket）" class="headerlink" title="项目中使用websocket消息推送模块（分布式）（websocket）"></a>项目中使用websocket消息推送模块（分布式）（websocket）</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">使用pub/pub/sub主题订阅者模式，可以实现1:N的消息队列。</span><br><span class="line"></span><br><span class="line">使用redis消息发布订阅缺点：在消费者下线的情况下，生产的消息会丢失。此场景，建议用MQ。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="websocket集群-分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）"><a href="#websocket集群-分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）" class="headerlink" title="websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)"></a>websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)</h2><blockquote>
-<p>本来想用websocket做一个消息推送 可是分布式环境下不支持session共享因为服务器不同<br>所以采用 rabbitMQ+webSocket实现分布式消息推送<br>1、生产者将消息 发送给 rabbitMQ 的 virtual-host:&#x2F;(顶极路由) 再由它路由到交换机 最终由交换机通过”路由键”–”指定具体的管道”<br>2、消费者监听–”指定的管道”–获取消息<br>3、最终将获取的消息 交给 webSocket 被@OnMessage注解标识的方法<br>4、每次消费一条消息交给　被@OnMessage注解标识的方法 返回给前台<br>最终实现分布式实时推送</p>
-</blockquote>
-<p><img src="/doc/image/websocket.png" alt="websocket集群"></p>
-<h3 id="下面就说一下代码中会出现的问题"><a href="#下面就说一下代码中会出现的问题" class="headerlink" title="下面就说一下代码中会出现的问题"></a>下面就说一下代码中会出现的问题</h3><ul>
-<li>[TEXT_FULL_WRITING]</li>
+    <section class="markdown-content"><h2 id="SpringCloud体系的微服务架构"><a href="#SpringCloud体系的微服务架构" class="headerlink" title="SpringCloud体系的微服务架构"></a>SpringCloud体系的微服务架构</h2><ul>
+<li>1、项目工程1- 注册中心（eureka）</li>
+<li>2、项目工程2- 网关（gateway）</li>
+<li>3、项目工程3- 业务项目 （实际的各种业务项目（用户中心平台，订单项目平台等））</li>
 </ul>
-<p>java.io.EOFException（websocket自动断开连接问题）</p>
-<ul>
-<li>[TEXT_FULL_WRITING]</li>
+<h3 id="注册中心（eureka）"><a href="#注册中心（eureka）" class="headerlink" title="注册中心（eureka）"></a>注册中心（eureka）</h3><ul>
+<li><p>（管理监控各个工程项目）</p>
+</li>
+<li><p>启动注册中心 (端口-8090)</p>
+</li>
 </ul>
-<p>onMessage方法有返回值，导致onMessage无法被sync block控制。<br>session没有被同步控制，导致多线程情况下，出现IllegalStateException<br>session.getAsyncRemote()可能是tomcat有bug引起，依旧会出现TEXT_FULL_WRITING</p>
-<ul>
-<li>java.io.EOFException（websocket自动断开连接问题）</li>
+<p><img src="/doc/springcloud1/eureka1.jpg" alt="启动注册中心"></p>
+<h3 id="网关（gateway）"><a href="#网关（gateway）" class="headerlink" title="网关（gateway）"></a>网关（gateway）</h3><ul>
+<li><p>（主要访问入口，用户登录鉴权）</p>
+</li>
+<li><p>启动网关 (端口-8091)</p>
+</li>
 </ul>
-<p>原因：使用了nginx服务，nginx配置：proxy_read_timeout(Default: 60s;)，如果一直没有数据传输，连接会在过了这个时间之后自动关闭</p>
-<h3 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h3><blockquote>
-<p>客户端每过小于60s的时间就给，服务器发送一个消息，服务器不用做处理维持心跳。<br>proxy_read_timeout时间设置大一点（就放在上面nginx配置中就可以了）</p>
-</blockquote>
-<h2 id="websocket-socket-js测试"><a href="#websocket-socket-js测试" class="headerlink" title="websocket socket.js测试"></a>websocket socket.js测试</h2><ul>
-<li><p>前端demo 与服务端建立链接，监听订阅相关推送数据接口<br>websocket-index.html</p>
-</li>
-<li><p>模拟数据变动接口 <a target="_blank" rel="noopener" href="http://127.0.0.1:8021/websocket/ws/test/202106">http://127.0.0.1:8021/websocket/ws/test/202106</a> 数据变动页面实时收到通知</p>
-</li>
-<li><p>统一前缀：<a target="_blank" rel="noopener" href="http://127.0.0.1:8021/websocket/ws/endPoint">http://127.0.0.1:8021/websocket/ws/endPoint</a></p>
-</li>
-<li><p>广播：ws&#x2F;topic&#x2F;getRigUpOrderDetail&#x2F;+uuid</p>
-</li>
-<li><p>一对一：ws&#x2F;user&#x2F;+memberId+&#x2F;getRigUpOrderDetail&#x2F;+uuid</p>
-</li>
+<p><img src="/doc/springcloud1/gateway1.jpg" alt="启动网关"></p>
+<h3 id="业务项目"><a href="#业务项目" class="headerlink" title="业务项目"></a>业务项目</h3><ul>
+<li>（连接数据库，查询数据，提供api给前端）</li>
+<li>启动业务项目 (端口-8092)</li>
+<li>微服务之间通信通过@FeignClient注解暴露接口给其他微服务访问</li>
+</ul>
+<p><img src="/doc/springcloud1/project1.jpg" alt="启动业务项目"></p>
+<h2 id="微服务访问测试（）"><a href="#微服务访问测试（）" class="headerlink" title="微服务访问测试（）"></a>微服务访问测试（）</h2><h3 id="注册中心测试"><a href="#注册中心测试" class="headerlink" title="注册中心测试"></a>注册中心测试</h3><ul>
+<li>网关工程、业务项目注册成功）(端口-8090)</li>
+</ul>
+<p><img src="/doc/springcloud1/eureka-test1.jpg" alt="注册中心测试"></p>
+<h3 id="业务项目测试"><a href="#业务项目测试" class="headerlink" title="业务项目测试"></a>业务项目测试</h3><ul>
+<li>直接访问业务项目的api (端口-8092)<br><img src="/doc/springcloud1/coretest1.jpg" alt="注册中心测试"></li>
+</ul>
+<h3 id="网关访问测试"><a href="#网关访问测试" class="headerlink" title="网关访问测试"></a>网关访问测试</h3><ul>
+<li>通过网关访问业务项目的api (端口-8091)<br><img src="/doc/springcloud1/gateway8091.jpg" alt="注册中心测试"></li>
 </ul>
 </section>
     <!-- Tags START -->
@@ -240,8 +242,16 @@
       <div class="tags">
         <span>Tags:</span>
         
-  <a href="/tags#websocket" >
-    <span class="tag-code">websocket</span>
+  <a href="/tags#SpringCloud" >
+    <span class="tag-code">SpringCloud</span>
+  </a>
+
+  <a href="/tags#eureka" >
+    <span class="tag-code">eureka</span>
+  </a>
+
+  <a href="/tags#gateway" >
+    <span class="tag-code">gateway</span>
   </a>
 
       </div>
@@ -252,20 +262,13 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2025/01/02/bug/halobug1/">
+      <a class="nav-left" href="/2025/01/02/2025/01/websocket/">
         <span class="nav-arrow">← </span>
         
-          Gradle本地编译Bug问题解决Error while evaluating property &#39;generatedProperties&#39;
+          websocket消息推送模块（分布式）（redis消息发布订阅）
         
       </a>
     
-    
-      <a class="nav-right" href="/2025/01/03/springcloud/springcloud-main/">
-        
-          SpringCloud体系的微服务架构
-        
-        <span class="nav-arrow"> →</span>
-      </a>
     
   </div>
 
@@ -317,7 +320,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8websocket%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E6%A8%A1%E5%9D%97%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%89%EF%BC%88websocket%EF%BC%89"><span class="toc-nav-text">项目中使用websocket消息推送模块（分布式）（websocket）</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#websocket%E9%9B%86%E7%BE%A4-%E5%88%86%E5%B8%83%E8%AE%A2%E9%98%85%E6%B6%88%E6%81%AF%EF%BC%88%E5%8F%AF%E4%BB%A5%E6%98%AF%E8%BD%BB%E9%87%8F%E7%9A%84redis%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%BC%93%E5%AD%98Mq%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BC%89"><span class="toc-nav-text">websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%8B%E9%9D%A2%E5%B0%B1%E8%AF%B4%E4%B8%80%E4%B8%8B%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-nav-text">下面就说一下代码中会出现的问题</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="toc-nav-text">解决方法：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#websocket-socket-js%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">websocket socket.js测试</span></a></li></ol>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#SpringCloud%E4%BD%93%E7%B3%BB%E7%9A%84%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84"><span class="toc-nav-text">SpringCloud体系的微服务架构</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%EF%BC%88eureka%EF%BC%89"><span class="toc-nav-text">注册中心（eureka）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BD%91%E5%85%B3%EF%BC%88gateway%EF%BC%89"><span class="toc-nav-text">网关（gateway）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%A1%B9%E7%9B%AE"><span class="toc-nav-text">业务项目</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95%EF%BC%88%EF%BC%89"><span class="toc-nav-text">微服务访问测试（）</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">注册中心测试</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%A1%B9%E7%9B%AE%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">业务项目测试</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E7%BD%91%E5%85%B3%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">网关访问测试</span></a></li></ol></li></ol>
     
   </div>
 </aside>
@@ -327,7 +330,7 @@
 
 <script>
   (function () {
-    var url = 'http://example.com/2025/01/02/2025/01/websocket/';
+    var url = 'http://example.com/2025/01/03/springcloud/springcloud-main/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
