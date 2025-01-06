@@ -10,7 +10,7 @@
   
   <title>
     
-      Gradle本地编译Bug问题解决Error while evaluating property &#39;generatedProperties&#39; | 个人笔记
+      使用Nacos管理微服务架构 | 个人笔记
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -192,8 +192,8 @@
 </header>
 
     <div id="article-banner">
-  <h2>Gradle本地编译Bug问题解决Error while evaluating property 'generatedProperties'</h2>
-  <p class="post-date">2025-01-02</p>
+  <h2>使用Nacos管理微服务架构</h2>
+  <p class="post-date">2025-01-04</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
   </div>
@@ -201,29 +201,85 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h3 id="Gradle本地编译Bug问题解决Error-while-evaluating-property-‘generatedProperties’-of-task-‘-application-generateGitProperties’"><a href="#Gradle本地编译Bug问题解决Error-while-evaluating-property-‘generatedProperties’-of-task-‘-application-generateGitProperties’" class="headerlink" title="Gradle本地编译Bug问题解决Error while evaluating property ‘generatedProperties’ of task ‘:application:generateGitProperties’"></a>Gradle本地编译Bug问题解决Error while evaluating property ‘generatedProperties’ of task ‘:application:generateGitProperties’</h3><ul>
-<li>Gradle框架的项目运行失败</li>
+    <section class="markdown-content"><h2 id="使用Nacos管理微服务架构"><a href="#使用Nacos管理微服务架构" class="headerlink" title="使用Nacos管理微服务架构"></a>使用Nacos管理微服务架构</h2><ul>
+<li>1、注册中心、配置中心（nacos）</li>
+<li>2、项目工程1- 网关（gateway）</li>
+<li>3、项目工程2- 认证授权服务（gateway）</li>
+<li>4、项目工程3- 业务项目 （实际的各种业务项目（用户中心平台，订单项目平台等））</li>
 </ul>
-<p>:generateGitProperties git submodule Build FAILED in Halo</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Error <span class="keyword">while</span> evaluating property <span class="string">&#x27;generatedProperties&#x27;</span> of task <span class="string">&#x27;:generateGitProperties&#x27;</span></span><br><span class="line">&gt; No .git directory found!</span><br><span class="line">Exception</span><br><span class="line">org.gradle.api.tasks.TaskExecutionException: Execution failed <span class="keyword">for</span> task <span class="string">&#x27;:generateGitProperties&#x27;</span>.	</span><br><span class="line">at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:<span class="number">38</span>)	</span><br><span class="line">•••</span><br><span class="line">Caused by: org.gradle.api.internal.tasks.properties.PropertyEvaluationException: Error <span class="keyword">while</span> evaluating property <span class="string">&#x27;generatedProperties&#x27;</span> of task <span class="string">&#x27;:generateGitProperties&#x27;</span>	</span><br><span class="line">at org.gradle.api.internal.tasks.properties.InputParameterUtils.prepareInputParameterValue(InputParameterUtils.java:<span class="number">33</span>)	</span><br><span class="line">•••</span><br><span class="line">Caused by: java.lang.IllegalStateException: No .git directory found!	</span><br><span class="line">at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)	</span><br><span class="line">•••</span><br><span class="line">at com.gorylenko.GitProperties.generate(GitProperties.groovy:<span class="number">68</span>)	</span><br><span class="line">•••</span><br><span class="line">at com.gorylenko.GenerateGitPropertiesTask.getGeneratedProperties(GenerateGitPropertiesTask.groovy:<span class="number">75</span>)	</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>这个Bug 是由插件 “com.gorylenko.gradle-git-properties” 引起的，去掉就好了</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>把build.gradle文件的com.gorylenko.gradle-git-properties依赖去掉就可以了</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id &#x27;com.gorylenko.gradle-git-properties&#x27; version &#x27;2.0.0&#x27;</span><br></pre></td></tr></table></figure>
-
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/63049665/generategitproperties-git-submodule-build-failed-in-heroku">https://stackoverflow.com/questions/63049665/generategitproperties-git-submodule-build-failed-in-heroku</a></p>
+<h3 id="注册中心（Nacos）"><a href="#注册中心（Nacos）" class="headerlink" title="注册中心（Nacos）"></a>注册中心（Nacos）</h3><ul>
+<li><p>（管理监控各个微服务、以及微服务的配置文件）</p>
+</li>
+<li><p>启动Nacos  (端口-8848) 访问地址：<a target="_blank" rel="noopener" href="http://localhost:8848/nacos">http://localhost:8848/nacos</a>  默认用户名：nacos，密码 nacos</p>
+</li>
+<li><p>Nacos注册服务</p>
+<blockquote>
+<p>nacos 搭建 nacos client 并注册服务跟 eureka 的流程差不多，先引入客户端依赖，然后添加配置即可。启动 nacos client 后就会自动往注册中心注册服务。需注意，nacos 服务端需保持启动状态，否则连接不上服务端将会注册失败。</p>
+</blockquote>
+<blockquote>
+<p>首先，我们先引入依赖，下面假设父工程 springclouddemo 作为依赖管理，父工程下面有子模块 order-service 作为服务需注册到 nacos 注册中心当中。</p>
+</blockquote>
+<blockquote>
+<p>需要在父工程 nacos-cloud 的 pom.xml 中添加 nacos 相关管理依赖</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="/doc/nacos/nacos-servies.png" alt="Nacos注册中心"></p>
+<ul>
+<li>Nacos配置中心</li>
+</ul>
+<p><img src="/doc/nacos/nacos-setting.png" alt="Nacos注册中心"></p>
+<h3 id="启动相关微服务"><a href="#启动相关微服务" class="headerlink" title="启动相关微服务"></a>启动相关微服务</h3><ul>
+<li><p>启动网关 (nacos-gateway 端口-9999，负责：路由转发，负载均衡)</p>
+</li>
+<li><p>统一认证登录授权服务 (nacos-auth 端口-9000，负责：认证授权,@FeignClient关联system获取用户信息)</p>
+</li>
+<li><p>业务项目 (nacos-system: 基础服务（菜单，用户、角色等）)</p>
+</li>
+</ul>
+<p><img src="/doc/nacos/run-project.png" alt="启动项目"></p>
+<h2 id="微服务访问测试"><a href="#微服务访问测试" class="headerlink" title="微服务访问测试"></a>微服务访问测试</h2><h3 id="认证授权服务访问测试"><a href="#认证授权服务访问测试" class="headerlink" title="认证授权服务访问测试"></a>认证授权服务访问测试</h3><ul>
+<li>直接访问授权登录接口（用户：admin 密码：123456）<ul>
+<li><a target="_blank" rel="noopener" href="http://localhost:9000/oauth2/token">http://localhost:9000/oauth2/token</a></li>
+</ul>
+</li>
+</ul>
+<p><img src="/doc/nacos/auth-token.png" alt="授权登录接口"></p>
+<h3 id="业务微服务访问测试"><a href="#业务微服务访问测试" class="headerlink" title="业务微服务访问测试"></a>业务微服务访问测试</h3><ul>
+<li>直接访问业务项目的api (带上登录授权接口返回的token) (端口-8800)<ul>
+<li><a target="_blank" rel="noopener" href="http://localhost:8800/api/v1/users/page">http://localhost:8800/api/v1/users/page</a></li>
+</ul>
+</li>
+</ul>
+<p><img src="/doc/nacos/user-info.png" alt="用户列表接口"></p>
+<h3 id="通过网关访问测试"><a href="#通过网关访问测试" class="headerlink" title="通过网关访问测试"></a>通过网关访问测试</h3><ul>
+<li>通过网关访问授权登录接口：<a target="_blank" rel="noopener" href="http://localhost:9999/nacos-auth/oauth2/token">http://localhost:9999/nacos-auth/oauth2/token</a></li>
+</ul>
+<p><img src="/doc/nacos/gateway-to-auth.png" alt="通过网格访问授权登录接口"></p>
+<ul>
+<li>通过网关访问授权登录接口：<a target="_blank" rel="noopener" href="http://localhost:9999/nacos-system/api/v1/users/page">http://localhost:9999/nacos-system/api/v1/users/page</a></li>
+</ul>
+<p><img src="/doc/nacos/gateway-to-system.png" alt="通过网格访问用户列表接口"></p>
 </section>
     <!-- Tags START -->
     
       <div class="tags">
         <span>Tags:</span>
         
-  <a href="/tags#Gradle" >
-    <span class="tag-code">Gradle</span>
+  <a href="/tags#gateway" >
+    <span class="tag-code">gateway</span>
   </a>
 
-  <a href="/tags#Halo" >
-    <span class="tag-code">Halo</span>
+  <a href="/tags#Nacos" >
+    <span class="tag-code">Nacos</span>
+  </a>
+
+  <a href="/tags#SpringCloud Alibaba Cloud" >
+    <span class="tag-code">SpringCloud Alibaba Cloud</span>
+  </a>
+
+  <a href="/tags#oauth2" >
+    <span class="tag-code">oauth2</span>
   </a>
 
       </div>
@@ -234,20 +290,13 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2025/01/02/websocket/websocket/">
+      <a class="nav-left" href="/2025/01/03/springcloud/springcloud-main/">
         <span class="nav-arrow">← </span>
-        
-          websocket消息推送模块（分布式）（redis消息发布订阅）
-        
-      </a>
-    
-    
-      <a class="nav-right" href="/2025/01/03/springcloud/springcloud-main/">
         
           SpringCloud体系的微服务架构
         
-        <span class="nav-arrow"> →</span>
       </a>
+    
     
   </div>
 
@@ -299,7 +348,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Gradle%E6%9C%AC%E5%9C%B0%E7%BC%96%E8%AF%91Bug%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3Error-while-evaluating-property-%E2%80%98generatedProperties%E2%80%99-of-task-%E2%80%98-application-generateGitProperties%E2%80%99"><span class="toc-nav-text">Gradle本地编译Bug问题解决Error while evaluating property ‘generatedProperties’ of task ‘:application:generateGitProperties’</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-nav-text">解决方案</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-nav-text">参考文档</span></a>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E4%BD%BF%E7%94%A8Nacos%E7%AE%A1%E7%90%86%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84"><span class="toc-nav-text">使用Nacos管理微服务架构</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%EF%BC%88Nacos%EF%BC%89"><span class="toc-nav-text">注册中心（Nacos）</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E5%90%AF%E5%8A%A8%E7%9B%B8%E5%85%B3%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="toc-nav-text">启动相关微服务</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">微服务访问测试</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">认证授权服务访问测试</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%9A%E5%8A%A1%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">业务微服务访问测试</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E9%80%9A%E8%BF%87%E7%BD%91%E5%85%B3%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">通过网关访问测试</span></a></li></ol></li></ol>
     
   </div>
 </aside>
@@ -309,7 +358,7 @@
 
 <script>
   (function () {
-    var url = 'http://example.com/2025/01/02/bug/halobug1/';
+    var url = 'http://example.com/2025/01/04/nacos/springcloud-nacos/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({

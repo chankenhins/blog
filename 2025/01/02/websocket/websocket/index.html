@@ -10,7 +10,7 @@
   
   <title>
     
-      Gradle本地编译Bug问题解决Error while evaluating property &#39;generatedProperties&#39; | 个人笔记
+      websocket消息推送模块（分布式）（redis消息发布订阅） | 个人笔记
     
   </title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -192,7 +192,7 @@
 </header>
 
     <div id="article-banner">
-  <h2>Gradle本地编译Bug问题解决Error while evaluating property 'generatedProperties'</h2>
+  <h2>websocket消息推送模块（分布式）（redis消息发布订阅）</h2>
   <p class="post-date">2025-01-02</p>
   <div class="arrow-down">
     <a href="javascript:;"></a>
@@ -201,29 +201,47 @@
 <main class="app-body flex-box">
   <!-- Article START -->
   <article class="post-article">
-    <section class="markdown-content"><h3 id="Gradle本地编译Bug问题解决Error-while-evaluating-property-‘generatedProperties’-of-task-‘-application-generateGitProperties’"><a href="#Gradle本地编译Bug问题解决Error-while-evaluating-property-‘generatedProperties’-of-task-‘-application-generateGitProperties’" class="headerlink" title="Gradle本地编译Bug问题解决Error while evaluating property ‘generatedProperties’ of task ‘:application:generateGitProperties’"></a>Gradle本地编译Bug问题解决Error while evaluating property ‘generatedProperties’ of task ‘:application:generateGitProperties’</h3><ul>
-<li>Gradle框架的项目运行失败</li>
+    <section class="markdown-content"><h2 id="项目中使用websocket消息推送模块（分布式）（websocket）"><a href="#项目中使用websocket消息推送模块（分布式）（websocket）" class="headerlink" title="项目中使用websocket消息推送模块（分布式）（websocket）"></a>项目中使用websocket消息推送模块（分布式）（websocket）</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">使用pub/pub/sub主题订阅者模式，可以实现1:N的消息队列。</span><br><span class="line"></span><br><span class="line">使用redis消息发布订阅缺点：在消费者下线的情况下，生产的消息会丢失。此场景，建议用MQ。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="websocket集群-分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）"><a href="#websocket集群-分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）" class="headerlink" title="websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)"></a>websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)</h2><blockquote>
+<p>本来想用websocket做一个消息推送 可是分布式环境下不支持session共享因为服务器不同<br>所以采用 rabbitMQ+webSocket实现分布式消息推送<br>1、生产者将消息 发送给 rabbitMQ 的 virtual-host:&#x2F;(顶极路由) 再由它路由到交换机 最终由交换机通过”路由键”–”指定具体的管道”<br>2、消费者监听–”指定的管道”–获取消息<br>3、最终将获取的消息 交给 webSocket 被@OnMessage注解标识的方法<br>4、每次消费一条消息交给　被@OnMessage注解标识的方法 返回给前台<br>最终实现分布式实时推送</p>
+</blockquote>
+<p><img src="/doc/image/websocket.png" alt="websocket集群"></p>
+<h3 id="下面就说一下代码中会出现的问题"><a href="#下面就说一下代码中会出现的问题" class="headerlink" title="下面就说一下代码中会出现的问题"></a>下面就说一下代码中会出现的问题</h3><ul>
+<li>[TEXT_FULL_WRITING]</li>
 </ul>
-<p>:generateGitProperties git submodule Build FAILED in Halo</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Error <span class="keyword">while</span> evaluating property <span class="string">&#x27;generatedProperties&#x27;</span> of task <span class="string">&#x27;:generateGitProperties&#x27;</span></span><br><span class="line">&gt; No .git directory found!</span><br><span class="line">Exception</span><br><span class="line">org.gradle.api.tasks.TaskExecutionException: Execution failed <span class="keyword">for</span> task <span class="string">&#x27;:generateGitProperties&#x27;</span>.	</span><br><span class="line">at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:<span class="number">38</span>)	</span><br><span class="line">•••</span><br><span class="line">Caused by: org.gradle.api.internal.tasks.properties.PropertyEvaluationException: Error <span class="keyword">while</span> evaluating property <span class="string">&#x27;generatedProperties&#x27;</span> of task <span class="string">&#x27;:generateGitProperties&#x27;</span>	</span><br><span class="line">at org.gradle.api.internal.tasks.properties.InputParameterUtils.prepareInputParameterValue(InputParameterUtils.java:<span class="number">33</span>)	</span><br><span class="line">•••</span><br><span class="line">Caused by: java.lang.IllegalStateException: No .git directory found!	</span><br><span class="line">at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)	</span><br><span class="line">•••</span><br><span class="line">at com.gorylenko.GitProperties.generate(GitProperties.groovy:<span class="number">68</span>)	</span><br><span class="line">•••</span><br><span class="line">at com.gorylenko.GenerateGitPropertiesTask.getGeneratedProperties(GenerateGitPropertiesTask.groovy:<span class="number">75</span>)	</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>这个Bug 是由插件 “com.gorylenko.gradle-git-properties” 引起的，去掉就好了</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>把build.gradle文件的com.gorylenko.gradle-git-properties依赖去掉就可以了</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id &#x27;com.gorylenko.gradle-git-properties&#x27; version &#x27;2.0.0&#x27;</span><br></pre></td></tr></table></figure>
-
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/63049665/generategitproperties-git-submodule-build-failed-in-heroku">https://stackoverflow.com/questions/63049665/generategitproperties-git-submodule-build-failed-in-heroku</a></p>
+<p>java.io.EOFException（websocket自动断开连接问题）</p>
+<ul>
+<li>[TEXT_FULL_WRITING]</li>
+</ul>
+<p>onMessage方法有返回值，导致onMessage无法被sync block控制。<br>session没有被同步控制，导致多线程情况下，出现IllegalStateException<br>session.getAsyncRemote()可能是tomcat有bug引起，依旧会出现TEXT_FULL_WRITING</p>
+<ul>
+<li>java.io.EOFException（websocket自动断开连接问题）</li>
+</ul>
+<p>原因：使用了nginx服务，nginx配置：proxy_read_timeout(Default: 60s;)，如果一直没有数据传输，连接会在过了这个时间之后自动关闭</p>
+<h3 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h3><blockquote>
+<p>客户端每过小于60s的时间就给，服务器发送一个消息，服务器不用做处理维持心跳。<br>proxy_read_timeout时间设置大一点（就放在上面nginx配置中就可以了）</p>
+</blockquote>
+<h2 id="websocket-socket-js测试"><a href="#websocket-socket-js测试" class="headerlink" title="websocket socket.js测试"></a>websocket socket.js测试</h2><ul>
+<li><p>前端demo 与服务端建立链接，监听订阅相关推送数据接口<br>websocket-index.html</p>
+</li>
+<li><p>模拟数据变动接口 <a target="_blank" rel="noopener" href="http://127.0.0.1:8021/websocket/ws/test/202106">http://127.0.0.1:8021/websocket/ws/test/202106</a> 数据变动页面实时收到通知</p>
+</li>
+<li><p>统一前缀：<a target="_blank" rel="noopener" href="http://127.0.0.1:8021/websocket/ws/endPoint">http://127.0.0.1:8021/websocket/ws/endPoint</a></p>
+</li>
+<li><p>广播：ws&#x2F;topic&#x2F;getRigUpOrderDetail&#x2F;+uuid</p>
+</li>
+<li><p>一对一：ws&#x2F;user&#x2F;+memberId+&#x2F;getRigUpOrderDetail&#x2F;+uuid</p>
+</li>
+</ul>
 </section>
     <!-- Tags START -->
     
       <div class="tags">
         <span>Tags:</span>
         
-  <a href="/tags#Gradle" >
-    <span class="tag-code">Gradle</span>
-  </a>
-
-  <a href="/tags#Halo" >
-    <span class="tag-code">Halo</span>
+  <a href="/tags#websocket" >
+    <span class="tag-code">websocket</span>
   </a>
 
       </div>
@@ -234,17 +252,17 @@
   <div class="nav-container">
     <!-- reverse left and right to put prev and next in a more logic postition -->
     
-      <a class="nav-left" href="/2025/01/02/websocket/websocket/">
+      <a class="nav-left" href="/2024/12/28/springboot/bean_ioc/">
         <span class="nav-arrow">← </span>
         
-          websocket消息推送模块（分布式）（redis消息发布订阅）
+          springboot ioc 以及 解决循环依赖
         
       </a>
     
     
-      <a class="nav-right" href="/2025/01/03/springcloud/springcloud-main/">
+      <a class="nav-right" href="/2025/01/02/bug/halobug1/">
         
-          SpringCloud体系的微服务架构
+          Gradle本地编译Bug问题解决Error while evaluating property &#39;generatedProperties&#39;
         
         <span class="nav-arrow"> →</span>
       </a>
@@ -299,7 +317,7 @@
   <div class="toc-main">
     <strong class="toc-title">Catalog</strong>
     
-      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Gradle%E6%9C%AC%E5%9C%B0%E7%BC%96%E8%AF%91Bug%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3Error-while-evaluating-property-%E2%80%98generatedProperties%E2%80%99-of-task-%E2%80%98-application-generateGitProperties%E2%80%99"><span class="toc-nav-text">Gradle本地编译Bug问题解决Error while evaluating property ‘generatedProperties’ of task ‘:application:generateGitProperties’</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-nav-text">解决方案</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-nav-text">参考文档</span></a>
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8websocket%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E6%A8%A1%E5%9D%97%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%89%EF%BC%88websocket%EF%BC%89"><span class="toc-nav-text">项目中使用websocket消息推送模块（分布式）（websocket）</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#websocket%E9%9B%86%E7%BE%A4-%E5%88%86%E5%B8%83%E8%AE%A2%E9%98%85%E6%B6%88%E6%81%AF%EF%BC%88%E5%8F%AF%E4%BB%A5%E6%98%AF%E8%BD%BB%E9%87%8F%E7%9A%84redis%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%BC%93%E5%AD%98Mq%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%B8%AD%E9%97%B4%E4%BB%B6%EF%BC%89"><span class="toc-nav-text">websocket集群  (分布订阅消息（可以是轻量的redis，也可以缓存Mq消息队列中间件）)</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E4%B8%8B%E9%9D%A2%E5%B0%B1%E8%AF%B4%E4%B8%80%E4%B8%8B%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-nav-text">下面就说一下代码中会出现的问题</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="toc-nav-text">解决方法：</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#websocket-socket-js%E6%B5%8B%E8%AF%95"><span class="toc-nav-text">websocket socket.js测试</span></a></li></ol>
     
   </div>
 </aside>
@@ -309,7 +327,7 @@
 
 <script>
   (function () {
-    var url = 'http://example.com/2025/01/02/bug/halobug1/';
+    var url = 'http://example.com/2025/01/02/websocket/websocket/';
     var banner = ''
     if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
       $('#article-banner').css({
