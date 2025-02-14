@@ -213,6 +213,11 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line">  halo:</span><br><span class="line">    image: your_username/my-image-halo20:$&#123;TAG:-main&#125;</span><br><span class="line">    restart: on-failure:3</span><br><span class="line">    networks:</span><br><span class="line">      halo_network:</span><br><span class="line">    volumes:</span><br><span class="line">      - ~/.halo2:/root/.halo2</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;8090:8090&quot;</span><br><span class="line">    environment:</span><br><span class="line">      # JVM 参数，默认为 -Xmx256m -Xms256m，可以根据实际情况做调整，置空表示不添加 JVM 参数</span><br><span class="line">      - JVM_OPTS=-Xmx256m -Xms256m</span><br><span class="line">    command:</span><br><span class="line">      # 修改为自己已有的 MySQL 配置(使用宿主机公网IP)</span><br><span class="line">      - --spring.r2dbc.url=r2dbc:pool:mysql://192.168.50.173:3306/halo-next</span><br><span class="line">      - --spring.r2dbc.username=xuan</span><br><span class="line">      - --spring.r2dbc.password=123456</span><br><span class="line">      - --spring.sql.init.platform=mysql</span><br><span class="line">      # 外部访问地址，请根据实际需要修改pwd</span><br><span class="line">      - --halo.external-url=http://localhost:8090/</span><br><span class="line">      # 端口号 默认8090</span><br><span class="line">      - --server.port=8090</span><br><span class="line">networks:</span><br><span class="line">  halo_network:</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <ul>
+<li>在docker-compose.yaml文件目录下运行</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- 启动</span><br><span class="line">docker-compose up -d</span><br><span class="line"></span><br><span class="line">- 查看实时日志</span><br><span class="line">docker-compose logs -f</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
 <li>成功运行镜像</li>
 </ul>
 <p><img src="/doc/docker/docker-run-success.png" alt="运行镜像"></p>
@@ -220,7 +225,8 @@
 <li>访问本地运行中的项目</li>
 </ul>
 <p><img src="/doc/docker/project-run.png" alt="运行镜像"></p>
-<h2 id="4、上传到自己的Docker-Hub仓库"><a href="#4、上传到自己的Docker-Hub仓库" class="headerlink" title="4、上传到自己的Docker Hub仓库"></a>4、上传到自己的Docker Hub仓库</h2><ul>
+<h2 id="4、上传到自己的Docker-Hub仓库"><a href="#4、上传到自己的Docker-Hub仓库" class="headerlink" title="4、上传到自己的Docker Hub仓库"></a>4、上传到自己的Docker Hub仓库</h2><p>（<strong>推荐使用阿里容器镜像仓库个人版-免费，主要是国内访问速度快</strong>）</p>
+<ul>
 <li><p>方便运维工程师》》》直接拉取到线上服务器部署</p>
 </li>
 <li><p>登录Docker Hub 》》选择镜像上传》》》等待上传成功</p>
