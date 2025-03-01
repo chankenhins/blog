@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta name="description" content="kenhinschan&#39;s blog">
+  <meta name="keyword" content="hexo-theme, vuejs">
+  
+    <link rel="shortcut icon" href="/css/images/logo.png">
+  
+  <title>
+    
+      接入 Stripe 支付, 退款 | 个人笔记
+    
+  </title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/tomorrow.min.css" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+  
+    
+<script src="/js/qrious.js"></script>
+
+  
+  
+  
+  
+    <!-- MathJax support START -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- MathJax support END -->
+  
+
+
+  
+  
+    
+<script src="/js/local-search.js"></script>
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<div class="wechat-share">
+  <img src="/css/images/logo.png" />
+</div>
+  <body>
+    <header class="header fixed-header">
+  <div class="header-container">
+    <a class="home-link" href="/">
+      <div class="logo"></div>
+      <span>个人笔记</span>
+    </a>
+    <ul class="right-list">
+      
+        <li class="list-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/categories" class="item-link">分类</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/tags" class="item-link">标签</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/archives" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/project" class="item-link">项目</a>
+          
+        </li>
+      
+        <li class="list-item">
+          
+            <a href="/about" class="item-link">关于</a>
+          
+        </li>
+      
+      
+        <li class="menu-item menu-item-search right-list">
+    <a role="button" class="popup-trigger">
+        <i class="fa fa-search fa-fw"></i>
+    </a>
+</li>
+      
+    </ul>
+    <div class="menu">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </div>
+    <div class="menu-mask">
+      <ul class="menu-list">
+        
+          <li class="menu-item">
+            
+              <a href="/" class="menu-link">首页</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/categories" class="menu-link">分类</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/tags" class="menu-link">标签</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/archives" class="menu-link">归档</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/project" class="menu-link">项目</a>
+            
+          </li>
+        
+          <li class="menu-item">
+            
+              <a href="/about" class="menu-link">关于</a>
+            
+          </li>
+        
+      </ul>
+    </div>
+    
+      <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+            <span class="search-icon">
+                <i class="fa fa-search"></i>
+            </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocapitalize="off"
+                    placeholder="Please enter your keyword(s) to search." spellcheck="false"
+                    type="search" class="search-input">
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa fa-times-circle"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+    
+  </div>
+</header>
+
+    <div id="article-banner">
+  <h2>接入 Stripe 支付, 退款</h2>
+  <p class="post-date">2025-03-01</p>
+  <div class="arrow-down">
+    <a href="javascript:;"></a>
+  </div>
+</div>
+<main class="app-body flex-box">
+  <!-- Article START -->
+  <article class="post-article">
+    <section class="markdown-content"><h1 id="接入-Stripe-支付"><a href="#接入-Stripe-支付" class="headerlink" title="接入 Stripe 支付"></a>接入 Stripe 支付</h1><blockquote>
+<p>最近需要接入 Stripe 支付，研究下，发现 Stripe 支付有很多概念，这里做个笔记</p>
+</blockquote>
+<ul>
+<li>效果</li>
+</ul>
+<p><img src="/doc/stripe/pay-page.png" alt="Stripe支付"></p>
+<ul>
+<li>Stripe支付控制台</li>
+</ul>
+<p><img src="/doc/stripe/admin-dev.png" alt="控制台"></p>
+<ul>
+<li>Stripe支付控制台</li>
+</ul>
+<p><img src="/doc/stripe/pay-refund.png" alt="webhook事件"></p>
+<h2 id="1、拉起-Stripe-支付意图"><a href="#1、拉起-Stripe-支付意图" class="headerlink" title="1、拉起 Stripe 支付意图"></a>1、拉起 Stripe 支付意图</h2><ul>
+<li>需要设置 Stripe API 密钥</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置Stripe API密钥</span></span><br><span class="line"> Stripe.apiKey = secretKey;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//创建产品</span></span><br><span class="line"> Map&lt;String, Object&gt; params = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"> params.put(<span class="string">&quot;name&quot;</span>, title);</span><br><span class="line"> <span class="type">Product</span> <span class="variable">product</span> <span class="operator">=</span> Product.create(params);</span><br><span class="line"> product.setDescription(subTitle);</span><br><span class="line"> product.setDefaultPrice(String.valueOf(vipRechargeMenue.getSoldPrice()));</span><br><span class="line"> List&lt;String&gt; imgList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"> imgList.add(<span class="string">&quot;https://www.ollana.cn/images/favicon.png&quot;</span>);</span><br><span class="line"> product.setImages(imgList);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//创建价格</span></span><br><span class="line"> Map&lt;String, Object&gt; priceParams = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"> <span class="comment">// 将美元金额乘以100转化为cents</span></span><br><span class="line"> <span class="type">BigDecimal</span> <span class="variable">actualAmount</span> <span class="operator">=</span> moneyPrice.multiply(BigDecimal.valueOf(<span class="number">100</span>));  <span class="comment">//stripe的默认单位是分，即传入的amount实际上小数点会被左移两位</span></span><br><span class="line"> <span class="comment">//给price绑定元数据并更新price用于检索</span></span><br><span class="line"> Map&lt;String, String&gt; metadata = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"> metadata.put(<span class="string">&quot;orderId&quot;</span>, tradeNo);</span><br><span class="line"> priceParams.put(<span class="string">&quot;metadata&quot;</span>, metadata);  <span class="comment">//通过订单号关联用于检索price信息（可选）</span></span><br><span class="line"> priceParams.put(<span class="string">&quot;unit_amount&quot;</span>, actualAmount.intValue());</span><br><span class="line"> priceParams.put(<span class="string">&quot;currency&quot;</span>, <span class="string">&quot;usd&quot;</span>);<span class="comment">//货币单位：美元</span></span><br><span class="line"> priceParams.put(<span class="string">&quot;product&quot;</span>, product.getId());</span><br><span class="line"> <span class="type">Price</span> <span class="variable">price</span> <span class="operator">=</span> Price.create(priceParams);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="comment">//创建支付信息得到url</span></span><br><span class="line"> SessionCreateParams.<span class="type">Builder</span> <span class="variable">paramsBuilder</span> <span class="operator">=</span> SessionCreateParams.builder();</span><br><span class="line"> paramsBuilder.setMode(SessionCreateParams.Mode.PAYMENT);</span><br><span class="line"> paramsBuilder.setPaymentIntentData(SessionCreateParams.PaymentIntentData.builder()</span><br><span class="line">         .putMetadata(<span class="string">&quot;orderId&quot;</span>, tradeNo)</span><br><span class="line">         .build());</span><br><span class="line"></span><br><span class="line"> <span class="type">SessionCreateParams</span> <span class="variable">paramsData</span> <span class="operator">=</span> paramsBuilder</span><br><span class="line">             .setSuccessUrl(successUrl)  <span class="comment">//支付成功回调，可自定义成功页面</span></span><br><span class="line">             .setCancelUrl(cancelUrl)</span><br><span class="line">             .addLineItem(</span><br><span class="line">                 SessionCreateParams.LineItem.builder()</span><br><span class="line">                         .setQuantity(<span class="number">1L</span>)</span><br><span class="line">                         .setPrice(price.getId())</span><br><span class="line">                         .build()).build();</span><br><span class="line"> <span class="type">Session</span> <span class="variable">session</span> <span class="operator">=</span> Session.create(paramsData);</span><br><span class="line"> <span class="type">String</span> <span class="variable">sessionId</span> <span class="operator">=</span> session.getId();  <span class="comment">//退款方式1：拿到sessionId入库，退款的时候根据这个id找到PaymentIntent的id然后发起退款</span></span><br><span class="line"> <span class="comment">//创建本地订单</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2、发起Stripe-退款"><a href="#2、发起Stripe-退款" class="headerlink" title="2、发起Stripe 退款"></a>2、发起Stripe 退款</h2><ul>
+<li>需要设置相应的webhook事件，下面时退款关键代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//        if (StringUtils.isNotEmpty(obj.getPayNumber()))&#123;  //根据会话编号退款</span></span><br><span class="line"><span class="comment">//            Session session = Session.retrieve(obj.getPayNumber());</span></span><br><span class="line"><span class="comment">//            RefundCreateParams params;</span></span><br><span class="line"><span class="comment">//            if (obj.getPayMoney() != null &amp;&amp; obj.getPayMoney().compareTo(BigDecimal.ZERO) != 0)&#123;  //指定退款金额</span></span><br><span class="line"><span class="comment">//                BigDecimal actualAmount = obj.getPayMoney().multiply(BigDecimal.valueOf(100));  //api默认单位分</span></span><br><span class="line"><span class="comment">//                params = RefundCreateParams.builder()</span></span><br><span class="line"><span class="comment">//                        .setPaymentIntent(session.getPaymentIntent())</span></span><br><span class="line"><span class="comment">//                        .setAmount(actualAmount.longValue())</span></span><br><span class="line"><span class="comment">//                        .build();</span></span><br><span class="line"><span class="comment">//            &#125;else &#123;  //全额退款</span></span><br><span class="line"><span class="comment">//                params = RefundCreateParams.builder()</span></span><br><span class="line"><span class="comment">//                        .setPaymentIntent(session.getPaymentIntent())</span></span><br><span class="line"><span class="comment">//                        .build();</span></span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line"><span class="comment">//            Refund.create(params);</span></span><br><span class="line"><span class="comment">//            log.info(&quot;根据会话编号退款成功 本地单号：&#123;&#125;,用户：&#123;&#125;&quot;, obj.getId(),obj.getPayUsername());</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotEmpty(obj.getDes()))&#123;  <span class="comment">//根据最新交易编号-退款</span></span><br><span class="line">            Map&lt;String, Object&gt; params = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">            params.put(<span class="string">&quot;charge&quot;</span>, obj.getDes().trim());</span><br><span class="line">            <span class="keyword">if</span> (obj.getPayMoney() != <span class="literal">null</span> &amp;&amp; obj.getPayMoney().compareTo(BigDecimal.ZERO) != <span class="number">0</span>)&#123;  <span class="comment">//指定退款金额，否则全额退款</span></span><br><span class="line">                <span class="type">BigDecimal</span> <span class="variable">actualAmount</span> <span class="operator">=</span> obj.getPayMoney().multiply(BigDecimal.valueOf(<span class="number">100</span>));  <span class="comment">//api默认单位分</span></span><br><span class="line">                params.put(<span class="string">&quot;amount&quot;</span>, actualAmount.longValue());</span><br><span class="line">            &#125;</span><br><span class="line">            Refund.create(params);</span><br><span class="line">            log.info(<span class="string">&quot;根据退款编号退款成功 本地单号：&#123;&#125;,用户：&#123;&#125;&quot;</span>, obj.getId(), obj.getPayUsername());</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、Strip支付、退款回调ipn"><a href="#3、Strip支付、退款回调ipn" class="headerlink" title="3、Strip支付、退款回调ipn"></a>3、Strip支付、退款回调ipn</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">log.info(<span class="string">&quot;Stripe回调ipn&quot;</span>);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">payload</span> <span class="operator">=</span> request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));</span><br><span class="line">    <span class="type">String</span> <span class="variable">sigHeader</span> <span class="operator">=</span> request.getHeader(<span class="string">&quot;Stripe-Signature&quot;</span>);</span><br><span class="line">    <span class="comment">// 验证签名</span></span><br><span class="line">    <span class="type">Event</span> <span class="variable">event</span> <span class="operator">=</span> Webhook.constructEvent(payload, sigHeader, webhookSigningSecret);</span><br><span class="line">    log.info(<span class="string">&quot;stripe支付-签名验证通过event：&#123;&#125;&quot;</span>,JSON.toJSONString(event));</span><br><span class="line">    <span class="comment">// 反序列化事件数据</span></span><br><span class="line">    <span class="type">EventDataObjectDeserializer</span> <span class="variable">dataObjectDeserializer</span> <span class="operator">=</span> event.getDataObjectDeserializer();</span><br><span class="line">    <span class="type">StripeObject</span> <span class="variable">stripeObject</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dataObjectDeserializer.getObject().isPresent()) &#123;<span class="comment">//object有数据</span></span><br><span class="line">        stripeObject = dataObjectDeserializer.getObject().get();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;<span class="comment">//object没有数据，拿data的</span></span><br><span class="line">        stripeObject = event.getData().getObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">remoteStatus</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    Map&lt;String, String&gt; metaData = <span class="literal">null</span>;</span><br><span class="line">    <span class="type">PaymentIntent</span> <span class="variable">intent</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (stripeObject <span class="keyword">instanceof</span> Charge) &#123;</span><br><span class="line">        <span class="type">Charge</span> <span class="variable">object</span> <span class="operator">=</span> (Charge) stripeObject;</span><br><span class="line">        remoteStatus = object.getStatus();</span><br><span class="line">        metaData = object.getMetadata();</span><br><span class="line">        intent = object.getPaymentIntentObject();</span><br><span class="line">        <span class="keyword">if</span>(<span class="literal">null</span> == metaData)&#123;</span><br><span class="line">            metaData = intent.getMetadata();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        intent = (PaymentIntent) stripeObject;</span><br><span class="line">        remoteStatus = intent.getStatus();</span><br><span class="line">        metaData = intent.getMetadata();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!<span class="string">&quot;succeeded&quot;</span>.equals(remoteStatus))&#123; <span class="comment">//stripe那边的支付状态是-失败的</span></span><br><span class="line">        log.info(<span class="string">&quot;stripe支付状态验证不通过status：&#123;&#125;&quot;</span>,remoteStatus);</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理事件</span></span><br><span class="line">    <span class="keyword">switch</span> (event.getType()) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;payment_intent.succeeded&quot;</span>: &#123;<span class="comment">//支付成功</span></span><br><span class="line">            log.info(<span class="string">&quot;【==stripe支付成功1==】status：&#123;&#125;&quot;</span>,remoteStatus);</span><br><span class="line">            log.info(<span class="string">&quot;【==stripe支付成功2==】obj：&#123;&#125;&quot;</span>, JSON.toJSONString(stripeObject));</span><br><span class="line">            <span class="comment">//支付成功</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">orderSn</span> <span class="operator">=</span> metaData.get(<span class="string">&quot;orderId&quot;</span>);<span class="comment">//订单号</span></span><br><span class="line">            <span class="comment">//支付完成---处理本地订单</span></span><br><span class="line">            handleLocalPayOrder(orderSn,intent);</span><br><span class="line">            response.setStatus(<span class="number">200</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;charge.refunded&quot;</span>: &#123;<span class="comment">//退款成功处理</span></span><br><span class="line">            <span class="comment">//退款业务处理</span></span><br><span class="line">            log.info(<span class="string">&quot;【==stripe退款成功1==】status：&#123;&#125;&quot;</span>,remoteStatus);</span><br><span class="line">            log.info(<span class="string">&quot;【==stripe退款成功2==】status：&#123;&#125;&quot;</span>,JSON.toJSONString(stripeObject));</span><br><span class="line">            <span class="type">String</span> <span class="variable">orderIdFromStripe</span> <span class="operator">=</span> metaData.get(<span class="string">&quot;orderId&quot;</span>);<span class="comment">//订单号</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (orderIdFromStripe != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">//获取到了订单的ID</span></span><br><span class="line">                log.info(<span class="string">&quot;【stripe退款成功】订单号:&quot;</span> + orderIdFromStripe);</span><br><span class="line">                <span class="comment">//3.执行业务</span></span><br><span class="line">                handleLocalRefundOrder(orderIdFromStripe);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;【stripe退款成功】订单号不存在&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            response.setStatus(<span class="number">200</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            log.info(<span class="string">&quot;Unhandled event type: &#123;&#125;&quot;</span>, event.getType());</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    response.setStatus(<span class="number">500</span>);</span><br><span class="line">    log.info(<span class="string">&quot;【stripe-回调异常】: &#123;&#125;&quot;</span>, e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Stripe-支付官方提供的测试卡号"><a href="#Stripe-支付官方提供的测试卡号" class="headerlink" title="Stripe 支付官方提供的测试卡号"></a>Stripe 支付官方提供的测试卡号</h2><table class="data-table" data-transient-attributes="class" style="width: 100%; outline: none; border-collapse: collapse;" data-width="1382px"><colgroup><col span="1" width="345.5"><col span="1" width="345.5"><col span="1" width="345.5"><col span="1" width="345.5"></colgroup><tbody><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p><strong>卡号</strong></p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p><strong>品牌</strong></p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p><strong>CVC</strong></p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p><strong>年月</strong></p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>4242424242424242</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Visa</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>4000056655665556</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Visa (debit)</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>5555555555554444</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Mastercard</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>2223003122003222</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Mastercard (2-series)</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>5200828282828210</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Mastercard (debit)</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>5105105105105100</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Mastercard (prepaid)</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>378282246310005</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>American Express</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意4位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>371449635398431</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>American Express</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意4位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>6011111111111117</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Discover</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>6011000990139424</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Discover</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>3056930009020004</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Diners Club</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>36227206271667</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>Diners Club (14 digit card)</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>3566002020360505</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>JCB</p></td><td data-transient-attributes="table-cell-selection" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr><tr style="height: 30px;"><td data-transient-attributes="table-cell-selection" class="table-last-column" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>6200000000000005</p></td><td data-transient-attributes="table-cell-selection" class="table-last-column" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>UnionPay</p></td><td data-transient-attributes="table-cell-selection" class="table-last-column" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>任意3位数字</p></td><td data-transient-attributes="table-cell-selection" class="table-last-column table-last-row" style="min-width: auto; overflow-wrap: break-word; margin: 4px 8px; border: 1px solid rgb(217, 217, 217); padding: 4px 8px; cursor: default; vertical-align: top;"><p>大于当前时间的年月</p></td></tr></tbody></table>
+
+
+
+
+
+</section>
+    <!-- Tags START -->
+    
+      <div class="tags">
+        <span>Tags:</span>
+        
+  <a href="/tags#stripe" >
+    <span class="tag-code">stripe</span>
+  </a>
+
+      </div>
+    
+    <!-- Tags END -->
+    <!-- NAV START -->
+    
+  <div class="nav-container">
+    <!-- reverse left and right to put prev and next in a more logic postition -->
+    
+      <a class="nav-left" href="/2025/02/15/tool/idea-git-reset/">
+        <span class="nav-arrow">← </span>
+        
+          IDEA中Git提交代码,本地仓库回退到指定版本
+        
+      </a>
+    
+    
+  </div>
+
+    <!-- NAV END -->
+    <!-- 打赏 START -->
+    
+      <div class="money-like">
+        <div class="reward-btn">
+          赏
+          <span class="money-code">
+            <span class="alipay-code">
+              <div class="code-image"></div>
+              <b>使用支付宝打赏</b>
+            </span>
+            <span class="wechat-code">
+              <div class="code-image"></div>
+              <b>使用微信打赏</b>
+            </span>
+          </span>
+        </div>
+        <p class="notice">若你觉得我的文章对你有帮助，欢迎点击上方按钮对我打赏</p>
+      </div>
+    
+    <!-- 打赏 END -->
+    <!-- 二维码 START -->
+    
+      <div class="qrcode">
+        <canvas id="share-qrcode"></canvas>
+        <p class="notice">扫描二维码，分享此文章</p>
+      </div>
+    
+    <!-- 二维码 END -->
+    
+      <!-- Utterances START -->
+      <div id="utterances"></div>
+      <script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async></script>    
+      <!-- Utterances END -->
+    
+  </article>
+  <!-- Article END -->
+  <!-- Catalog START -->
+  
+    <aside class="catalog-container">
+  <div class="toc-main">
+    <strong class="toc-title">Catalog</strong>
+    
+      <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#%E6%8E%A5%E5%85%A5-Stripe-%E6%94%AF%E4%BB%98"><span class="toc-nav-text">接入 Stripe 支付</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1%E3%80%81%E6%8B%89%E8%B5%B7-Stripe-%E6%94%AF%E4%BB%98%E6%84%8F%E5%9B%BE"><span class="toc-nav-text">1、拉起 Stripe 支付意图</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2%E3%80%81%E5%8F%91%E8%B5%B7Stripe-%E9%80%80%E6%AC%BE"><span class="toc-nav-text">2、发起Stripe 退款</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#3%E3%80%81Strip%E6%94%AF%E4%BB%98%E3%80%81%E9%80%80%E6%AC%BE%E5%9B%9E%E8%B0%83ipn"><span class="toc-nav-text">3、Strip支付、退款回调ipn</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Stripe-%E6%94%AF%E4%BB%98%E5%AE%98%E6%96%B9%E6%8F%90%E4%BE%9B%E7%9A%84%E6%B5%8B%E8%AF%95%E5%8D%A1%E5%8F%B7"><span class="toc-nav-text">Stripe 支付官方提供的测试卡号</span></a></li></ol></li></ol>
+    
+  </div>
+</aside>
+  
+  <!-- Catalog END -->
+</main>
+
+<script>
+  (function () {
+    var url = 'http://example.com/2025/03/01/stripe/stripe-pay/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url)
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function() {
+      $(this).attr('src', '/css/images/error_icon.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function() {
+      var src = $(this).attr('src')
+      if (src !== '/css/images/error_icon.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="'+ src +'" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function() {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();
+</script>
+
+
+  <script>
+    var qr = new QRious({
+      element: document.getElementById('share-qrcode'),
+      value: document.location.href
+    });
+  </script>
+
+
+
+
+
+
+    <div class="scroll-top">
+  <span class="arrow-icon"></span>
+</div>
+    <footer class="app-footer">
+  <p class="copyright">
+    &copy; 2025 | Proudly powered by <a href="#" target="_blank">GPT</a>
+    <br>
+    Theme by <a target="_blank" rel="noopener" href="https://github.com/chankenhins">chankenhins</a>
+    
+  </p>
+</footer>
+
+<script>
+  function async(u, c) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+</script>
+<script>
+  async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+    FastClick.attach(document.body);
+  })
+</script>
+
+<script>
+  var hasLine = 'true';
+  async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js", function(){
+    $('figure pre').each(function(i, block) {
+      var figure = $(this).parents('figure');
+      if (hasLine === 'false') {
+        figure.find('.gutter').hide();
+      }
+      hljs.configure({useBR: true});
+      var lang = figure.attr('class').split(' ')[1] || 'code';
+      var codeHtml = $(this).html();
+      var codeTag = document.createElement('code');
+      codeTag.className = lang;
+      codeTag.innerHTML = codeHtml;
+      $(this).attr('class', '').empty().html(codeTag);
+      figure.attr('data-lang', lang.toUpperCase());
+      hljs.highlightBlock(block);
+    });
+  })
+</script>
+<!-- Baidu Tongji -->
+
+
+<script src="/js/script.js"></script>
+
+
+  </body>
+</html>
